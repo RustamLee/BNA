@@ -1,5 +1,5 @@
 package org.example.banco.service;
-
+/*package org.example.banco.org.example.banco.service;*/
 import org.example.banco.dao.CredentialDAO;
 import org.example.banco.dao.UsuarioDAO;
 import org.example.banco.enums.Permiso;
@@ -33,7 +33,7 @@ public class UsuarioService {
 
         // cliente
         if (permiso == Permiso.CLIENTE && idUsuarioActual != usuarioEditable.getId()) {
-            System.out.println("CLIENTE может изменять только себя");
+            System.out.println("CLIENTE, no dude en contactarnos");
             return;
         }
 
@@ -41,7 +41,7 @@ public class UsuarioService {
         if (permiso == Permiso.GESTOR) {
             Optional<Credencial> editableCred = credencialDAO.buscarPorIdUsuario(usuarioEditable.getId());
             if (editableCred.isEmpty() || editableCred.get().getPermiso() != Permiso.CLIENTE) {
-                System.out.println("GESTOR может редактировать только клиентов");
+                System.out.println("GESTOR solo puede editar clientes");
                 return;
             }
         }
@@ -53,5 +53,25 @@ public class UsuarioService {
         return usuarioDAO.buscarPorDni(dni);
     }
 
+    public void eliminarUsuarioPorId(int idUsuarioActual, Usuario usuarioEditable){
+        Optional<Credencial> credOpt = credencialDAO.buscarPorIdUsuario(idUsuarioActual);
+        int idUsuarioEditable = usuarioEditable.getId();
 
+        if (credOpt.isEmpty()) {
+            System.out.println("Credencial no encontrada");
+            return;
+        }
+        Permiso permiso = credOpt.get().getPermiso();
+
+        // gestor
+        if (permiso == Permiso.GESTOR) {
+            Optional<Credencial> editableCred = credencialDAO.buscarPorIdUsuario(idUsuarioEditable);
+            if (editableCred.isEmpty() || editableCred.get().getPermiso() != Permiso.CLIENTE) {
+                System.out.println("GESTOR puede eliminar solo clientes");
+                return;
+            }
+        }
+        // admin
+        usuarioDAO.eliminarUsuario(idUsuarioEditable);
+    }
 }

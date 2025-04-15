@@ -3,13 +3,11 @@ package org.example.banco.dao.impl;
 import org.example.banco.dao.CuentaDAO;
 import org.example.banco.enums.TipoCuenta;
 import org.example.banco.model.Cuenta;
-import org.example.banco.model.Usuario;
 import org.example.banco.util.ConexionSQL;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class CuentaDAOImpl implements CuentaDAO {
 

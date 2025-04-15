@@ -12,4 +12,5 @@ public interface UsuarioDAO {
     List<Usuario> obtenerUsuarios();
     Optional<Usuario> buscarPorEmailByStream(String email);
     void guardarDatosActualizados(int idUsuarioActual, Usuario usuarioEditable);
+    void eliminarUsuario(int idUsuarioActual);
 }

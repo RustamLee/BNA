@@ -1,8 +1,6 @@
 package org.example.banco.dao.impl;
 
 import org.example.banco.dao.UsuarioDAO;
-import org.example.banco.enums.Permiso;
-import org.example.banco.model.Credencial;
 import org.example.banco.model.Usuario;
 import org.example.banco.util.ConexionSQL;
 
@@ -108,7 +106,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     public Optional<Usuario> buscarPorEmailByStream(String email) {
         List<Usuario> coleccion = obtenerUsuarios();
         return coleccion.stream()
-                .filter(u->u.getEmail().equals(email))
+                .filter(u -> u.getEmail().equals(email))
                 .findFirst();
     }
 
@@ -130,6 +128,23 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error al actualizar datos del usuario: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void eliminarUsuario(int idUsuarioEditable) {
+        String sql = "DELETE FROM usuarios WHERE id_usuario = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, idUsuarioEditable);
+            int rowsUpdated = pstmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Usuario eliminado con éxito.");
+            } else {
+                System.out.println("No se pudo eliminar usuario. Usuario no encontrado.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
